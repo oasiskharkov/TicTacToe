@@ -8,7 +8,7 @@ Field* Field::instance {nullptr};
 
 Field* Field::getInstance()
 {
-    if (!instance)
+    if(!instance)
     {
         instance = new Field;
     }

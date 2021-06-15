@@ -23,7 +23,7 @@ Logic* Logic::instance {nullptr};
 
 Logic *Logic::getInstance()
 {
-    if (!instance)
+    if(!instance)
     {
         instance = new Logic;
     }
@@ -47,7 +47,7 @@ void Logic::setStatus(const Status status)
 
 void Logic::playerMove(std::unique_ptr<Field>& field)
 {
-    if (!field or m_eStatus != Status::PLAY)
+    if(!field or m_eStatus != Status::PLAY)
     {
         return;
     }
@@ -57,6 +57,7 @@ void Logic::playerMove(std::unique_ptr<Field>& field)
     do
     {
         char xc = {0}, yc = {0};
+        bool condition {true};
         do
         {
             std::cout << "Input x (1-3): ";
@@ -64,31 +65,32 @@ void Logic::playerMove(std::unique_ptr<Field>& field)
             std::cout << "Input y (1-3): ";
             yc = Utils::getch();
 
-            if (xc < '1' or xc > '0' + SIZE or yc < '1' or yc > '0' + SIZE)
+            condition = xc < '1' or xc > '0' + SIZE or yc < '1' or yc > '0' + SIZE;
+            if(condition)
             {
                 std::cout << "Incorrect coordinates! Try again!" << std::endl;
                 continue;
             }
-        } while (xc < '1' or xc > '0' + SIZE or yc < '1' or yc > '0' + SIZE);
+        } while(condition);
 
         x = xc - '0';
         y = yc - '0';
 
         result = field->setCell(Field::Cell::PLAYER, y - 1, x - 1);
-        if (!result)
+        if(!result)
         {
             std::cout << "Cell is busy! Try another cell!" << std::endl;
         }
-    } while (!result);
+    } while(!result);
 
 
-    if (result and checkWin(field))
+    if(result and checkWin(field))
     {
         m_eStatus = Status::WIN;
         return;
     }
 
-    if (!field->areFreeCells())
+    if(!field->areFreeCells())
     {
         m_eStatus = Status::DRAW;
     }
@@ -96,7 +98,7 @@ void Logic::playerMove(std::unique_ptr<Field>& field)
 
 void Logic::aiMove(std::unique_ptr<Field>& field)
 {
-    if (!field or m_eStatus != Status::PLAY)
+    if(!field or m_eStatus != Status::PLAY)
     {
         return;
     }
@@ -133,23 +135,23 @@ void Logic::aiMove(std::unique_ptr<Field>& field)
         result = trySafe;
     }
 
-    if (!result)
+    if(!result)
     {
         int i, j;
         do
         {
             i = rand() % SIZE;
             j = rand() % SIZE;
-        } while (!field->isCellEmpty(i, j));
+        } while(!field->isCellEmpty(i, j));
         result = field->setCell(Field::Cell::AI, i, j);
     }
 
-    if (result and checkWin(field))
+    if(result and checkWin(field))
     {
         m_eStatus = Status::LOSS;
     }
 
-    if (!field->areFreeCells())
+    if(!field->areFreeCells())
     {
         m_eStatus = Status::DRAW;
     }
@@ -177,10 +179,10 @@ bool Logic::checkLine(std::unique_ptr<Field>& field, int i, int j, const int vx,
 {
     const auto start = field->getCell(i, j);
     auto count {1};
-    while (i += vy, j += vx, start != Field::Cell::EMPTY and i >= 0 and j >= 0 and i < SIZE and j < SIZE)
+    while(i += vy, j += vx, start != Field::Cell::EMPTY and i >= 0 and j >= 0 and i < SIZE and j < SIZE)
     {
         auto next = field->getCell(i, j);
-        if (next == start)
+        if(next == start)
         {
             count++;
         }
@@ -224,10 +226,10 @@ bool Logic::tryFinishLine(const std::unique_ptr<Field> &field, int i, int j, con
 {
     const auto start = field->getCell(i, j);
     auto count {1};
-    while (i += vy, j += vx, start != Field::Cell::EMPTY and start == cell and i >= 0 and j >= 0 and i < SIZE and j < SIZE)
+    while(i += vy, j += vx, start != Field::Cell::EMPTY and start == cell and i >= 0 and j >= 0 and i < SIZE and j < SIZE)
     {
         auto next = field->getCell(i, j);
-        if (next == start)
+        if(next == start)
         {
             count++;
         }
@@ -243,7 +245,7 @@ bool Logic::tryFinishLine(const std::unique_ptr<Field> &field, int i, int j, con
             if(ni >= 0 and nj >= 0 and ni < SIZE and nj < SIZE)
             {
                 auto nextnext = field->getCell(ni, nj);
-                if (nextnext == cell)
+                if(nextnext == cell)
                 {
                     move = {i, j, SIZE};
                     return true;

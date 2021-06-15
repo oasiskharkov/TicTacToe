@@ -17,7 +17,7 @@ Menu* Menu::instance {nullptr};
 
 Menu* Menu::getInstance()
 {
-    if (!instance)
+    if(!instance)
     {
         instance = new Menu;
     }
@@ -29,7 +29,7 @@ Menu::Menu()
     field.reset(Field::getInstance());
     logic.reset(Logic::getInstance());
 
-    if (!field or !logic)
+    if(!field or !logic)
     {
         throw std::runtime_error("Error! Incorrect game initialization!");
     }
@@ -122,6 +122,7 @@ void Menu::printStatus() const
 char Menu::selectOption(const char left, const char right) const
 {
     char choice {0};
+    bool condition {true};
     do
     {
         std::stringstream ss;
@@ -130,11 +131,12 @@ char Menu::selectOption(const char left, const char right) const
 
         choice = Utils::getch();
 
-        if(choice < left or choice > right)
+        condition = choice < left or choice > right;
+        if(condition)
         {
             std::cout << "Uncorrect choice. Try again!" << std::endl;
         }
-    } while(choice < left or choice > right);
+    } while(condition);
     return choice;
 }
 

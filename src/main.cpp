@@ -8,7 +8,7 @@ int main()
     try
     {
         std::unique_ptr<Menu> menu {Menu::getInstance()};
-        if (menu)
+        if(menu)
         {
             menu->runInvitation();
         }
