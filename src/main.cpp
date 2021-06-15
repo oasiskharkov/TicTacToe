@@ -16,6 +16,7 @@ int main()
     catch (const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
     std::system("clear");
