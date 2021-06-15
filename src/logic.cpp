@@ -107,7 +107,7 @@ void Logic::aiMove(std::unique_ptr<Field>& field)
     auto tryWin = aiTryWin(field, winMove);
 
     std::tuple<int,int,int> safeMove;
-    auto trySafe = aiTrySafe(field, safeMove);
+    auto trySafe = aiTryIntercept(field, safeMove);
 
     if(trySafe and tryWin)
     {
@@ -161,12 +161,12 @@ bool Logic::checkWin(std::unique_ptr<Field>& field) const
     {
         for(auto j = 0; j < SIZE; ++j)
         {
-            if(checkLine(field, i, j, 1, 1) or
-               checkLine(field, i, j, 1, 0) or
-               checkLine(field, i, j, 0, 1) or
-               checkLine(field, i, j, 1, -1))
+            for(size_t k = 0; k < vecs.size() / 2; ++k)
             {
-                return true;
+                if(checkLine(field, i, j, vecs[k].first, vecs[k].second))
+                {
+                    return true;
+                }
             }
         }
     }
@@ -193,12 +193,12 @@ bool Logic::aiTryWin(const std::unique_ptr<Field>& field, std::tuple<int,int,int
     return findLine(field, Field::Cell::AI, move);
 }
 
-bool Logic::aiTrySafe(const std::unique_ptr<Field>& field, std::tuple<int,int,int>& move)
+bool Logic::aiTryIntercept(const std::unique_ptr<Field>& field, std::tuple<int,int,int>& move)
 {
     return findLine(field, Field::Cell::PLAYER, move);
 }
 
-bool Logic::findLine(const std::unique_ptr<Field>& field, Field::Cell cell, std::tuple<int,int,int>& move)
+bool Logic::findLine(const std::unique_ptr<Field>& field, const Field::Cell cell, std::tuple<int,int,int>& move)
 {
     for(auto cnt = SIZE - 1; cnt >= 1; --cnt)
     {
@@ -220,7 +220,7 @@ bool Logic::findLine(const std::unique_ptr<Field>& field, Field::Cell cell, std:
     return false;
 }
 
-bool Logic::tryFinishLine(const std::unique_ptr<Field> &field, int i, int j, const int vx, const int vy, Field::Cell cell, const int length, std::tuple<int,int,int>& move)
+bool Logic::tryFinishLine(const std::unique_ptr<Field> &field, int i, int j, const int vx, const int vy, const Field::Cell cell, const int length, std::tuple<int,int,int>& move)
 {
     const auto start = field->getCell(i, j);
     auto count {1};

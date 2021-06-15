@@ -22,9 +22,9 @@ private:
     bool checkWin(std::unique_ptr<Field>& field) const;
     bool checkLine(std::unique_ptr<Field>& field, int i, int j, const int vx, const int vy) const;
     bool aiTryWin(const std::unique_ptr<Field>& field, std::tuple<int,int,int>& move);
-    bool aiTrySafe(const std::unique_ptr<Field>& field, std::tuple<int,int,int>& move);
-    bool tryFinishLine(const std::unique_ptr<Field>& field, int i, int j, const int vx, const int vy, Field::Cell cell, const int length, std::tuple<int,int,int>& move);
-    bool findLine(const std::unique_ptr<Field> &field, Field::Cell cell, std::tuple<int,int, int>& move);
+    bool aiTryIntercept(const std::unique_ptr<Field>& field, std::tuple<int,int,int>& move);
+    bool tryFinishLine(const std::unique_ptr<Field>& field, int i, int j, const int vx, const int vy, const Field::Cell cell, const int length, std::tuple<int,int,int>& move);
+    bool findLine(const std::unique_ptr<Field> &field, const Field::Cell cell, std::tuple<int,int,int>& move);
 private:
     Status m_eStatus;
     static Logic* instance;
