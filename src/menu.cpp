@@ -39,6 +39,7 @@ void Menu::runInvitation()
 {
     char choice {0};
     std::system("clear");
+    std::cout << " **** TicTacToe ****" << std::endl;
     printMenuOption(1, ops[Option::START]);
     printMenuOption(2, ops[Option::EXIT]);
 
